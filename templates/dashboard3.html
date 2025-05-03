@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon Prime Analysis</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #00A8E1;
+        --secondary-color: #0F79AF;
+        --accent-color: #232F3E;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navbar {
+        background-color: var(--accent-color) !important;
+      }
+
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-dashboard {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-dashboard:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .visualization-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 30px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-title {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent-color);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fab fa-amazon me-2"></i>AMAZON PRIME ANALYTICS
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="fas fa-chart-bar me-1"></i>E-commerce Sales Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard2">
+                <i class="fas fa-chart-pie me-1"></i>Netflix Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/dashboard3">
+                <i class="fas fa-chart-line me-1"></i>Amazon Prime Analytics
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-chart-bar me-2"></i>Content Analysis
+        </h3>
+        
+        <!-- Add Sentiment Analysis Form -->
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Sentiment Analysis</h5>
+                <form method="POST" class="d-flex gap-2">
+                  <input type="hidden" name="analysis_type" value="sentiment">
+                  <input type="text" name="title" class="form-control" placeholder="Enter movie/show title" required>
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-comment-dots"></i> Analyze Sentiment
+                  </button>
+                </form>
+                {% if sentiment_analysis %}
+                <div class="mt-3">
+                  <div class="alert alert-{{ sentiment_analysis.color }}">
+                    <h5 class="mb-2">Sentiment Analysis Results</h5>
+                    <p class="mb-1"><strong>Sentiment:</strong> {{ sentiment_analysis.sentiment }}</p>
+                    <p class="mb-1"><strong>Score:</strong> {{ "%.2f"|format(sentiment_analysis.sentiment_score) }}</p>
+                    <p class="mb-1"><strong>Subjectivity:</strong> {{ sentiment_analysis.subjectivity_text }}</p>
+                    <p class="mb-0"><strong>Description:</strong> {{ sentiment_analysis.description }}</p>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Content Type Distribution</h5>
+                <form class="visualization-form" data-query="content_type">
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-chart-pie"></i> Show Distribution
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Top Countries</h5>
+                <form class="visualization-form" data-query="top_countries">
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-globe"></i> Show Countries
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Content Ratings</h5>
+                <form class="visualization-form" data-query="ratings">
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-star"></i> Show Ratings
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Release Year Trends</h5>
+                <form class="visualization-form" data-query="release_years">
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-calendar-alt"></i> Show Trends
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Top Genres</h5>
+                <form class="visualization-form" data-query="top_genres">
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-film"></i> Show Genres
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Dataset Information</h5>
+                <form class="visualization-form" data-query="dataset_shape">
+                  <button type="submit" class="btn btn-dashboard">
+                    <i class="fas fa-info-circle"></i> Show Info
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="visualization-container animate__animated animate__fadeIn">
+          <div id="visualization-content">
+            {% if plot_url %}
+            <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid" alt="Visualization">
+            {% elif shape_info %}
+            <div class="alert alert-info">
+              {{ shape_info|safe }}
+            </div>
+            {% elif table_html %}
+            <div class="table-responsive">
+              {{ table_html|safe }}
+            </div>
+            {% elif error %}
+            <div class="alert alert-danger">
+              {{ error }}
+            </div>
+            {% else %}
+            <div class="text-center text-muted">
+              <i class="fas fa-chart-bar fa-3x mb-3"></i>
+              <p>Select a visualization option above to view the data.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+          <p class="mb-0">
+            © Amazone Prime Analytics Dashboard | Built by Riya Vora (24mds015)
+          </p>
+        </div>
+      </footer>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const forms = document.querySelectorAll('.visualization-form');
+          
+          forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+              e.preventDefault();
+              const query = this.getAttribute('data-query');
+              
+              // Show loading state
+              const visualizationContent = document.getElementById('visualization-content');
+              visualizationContent.innerHTML = `
+                <div class="text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="mt-2">Loading visualization...</p>
+                </div>
+              `;
+              
+              // Make AJAX request
+              fetch(`/dashboard3?query=${query}`, {
+                headers: {
+                  'X-Requested-With': 'XMLHttpRequest'
+                }
+              })
+              .then(response => response.text())
+              .then(html => {
+                // Create a temporary div to parse the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // Extract only the visualization content
+                const newContent = tempDiv.querySelector('#visualization-content');
+                if (newContent) {
+                  visualizationContent.innerHTML = newContent.innerHTML;
+                } else {
+                  visualizationContent.innerHTML = html;
+                }
+              })
+              .catch(error => {
+                visualizationContent.innerHTML = `
+                  <div class="alert alert-danger">
+                    Error loading visualization: ${error.message}
+                  </div>
+                `;
+              });
+            });
+          });
+        });
+      </script>
+    </div>
+  </body>
+</html> 

@@ -1,0 +1,38 @@
+{% if error_message %}
+<div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+  <i class="fas fa-exclamation-circle me-2"></i>{{ error_message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+{% if shape_info %}
+<div class="dataset-info animate__animated animate__fadeIn mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><i class="fas fa-database me-2"></i>Dataset Information</h5>
+      {{ shape_info|safe }}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if table_html %}
+<div class="dataset-preview animate__animated animate__fadeIn mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title"><i class="fas fa-table me-2"></i>Dataset Preview (Top 20 Rows)</h5>
+      <div class="table-responsive">
+        {{ table_html|safe }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if plot_url %}
+<section class="visualization-container animate__animated animate__fadeIn mt-4">
+  <div class="text-center">
+    <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid rounded" />
+  </div>
+</section>
+{% endif %} 

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Amazon Prime Sentiment Analysis</h2>
+    
+    <!-- Search Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('sentiment_analysis') }}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="title" 
+                           placeholder="Enter a movie title to analyze its sentiment...">
+                    <button class="btn btn-primary" type="submit">Analyze Sentiment</button>
+                </div>
+            </form>
+            
+            {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            {% if analysis %}
+            <div class="card mt-4">
+                <div class="card-header bg-{{ analysis.color }} text-white">
+                    <h4>{{ analysis.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="lead">{{ analysis.description }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Sentiment Analysis</h5>
+                                    <div class="display-4 mb-3">{{ analysis.sentiment }}</div>
+                                    <div class="progress mb-3">
+                                        <div class="progress-bar bg-{{ analysis.color }}" 
+                                             role="progressbar" 
+                                             style="width: {{ (analysis.sentiment_score + 1) * 50 }}%"
+                                             aria-valuenow="{{ analysis.sentiment_score }}" 
+                                             aria-valuemin="-1" 
+                                             aria-valuemax="1">
+                                            {{ analysis.sentiment_score }}
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">
+                                        <strong>Subjectivity:</strong> {{ analysis.subjectivity_text }}
+                                        <br>
+                                        <small>(Score: {{ analysis.subjectivity }})</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Amazon Prime Recommendations</h2>
+    
+    <!-- Search Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('recommendations') }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="title" placeholder="Enter a movie title..." 
+                           value="{{ search_title if search_title else '' }}">
+                    <button class="btn btn-primary" type="submit">Get Recommendations</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="row">
+        {% if search_title %}
+            <div class="col-12 mb-4">
+                <h4>Recommendations similar to "{{ search_title }}"</h4>
+            </div>
+        {% else %}
+            <div class="col-12 mb-4">
+                <h4>Popular Movies</h4>
+            </div>
+        {% endif %}
+
+        {% for movie in recommendations %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <p class="card-text">{{ movie.description[:200] }}...</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Netflix Analysis</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #E50914;
+        --secondary-color: #B20710;
+        --accent-color: #221F1F;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .dashboard-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-dashboard {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-dashboard:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .visualization-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 30px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-title {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent-color);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fas fa-film me-2"></i>NETFLIX ANALYTICS
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="fas fa-chart-bar me-1"></i>E-commerce Sales Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/dashboard2">
+                <i class="fas fa-chart-pie me-1"></i>Netflix Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard3">
+                <i class="fas fa-chart-line me-1"></i>Amazon Prime Analytics
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard-header animate__animated animate__fadeIn">
+      <div class="container">
+        <h1 class="text-center mb-3">
+          <i class="fas fa-film me-2"></i>NETFLIX CONTENT ANALYSIS
+        </h1>
+        <p class="text-center mb-0">
+          Interactive dashboard for analyzing Netflix content distribution and trends
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Content Analysis Section -->
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-chart-pie me-2"></i>Content Analysis
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Content Type Distribution</h5>
+                <p class="card-text">
+                  Analyze the distribution of Movies vs TV Shows on Netflix.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="content_type">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-chart-bar"></i> Show Content Distribution
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Top Countries</h5>
+                <p class="card-text">
+                  See which countries produce the most Netflix content.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="top_countries">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-globe"></i> Show Top Countries
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Content Ratings</h5>
+                <p class="card-text">
+                  Analyze the distribution of content ratings on Netflix.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="ratings">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-star"></i> Show Ratings Distribution
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Release Year Trends</h5>
+                <p class="card-text">
+                  Track how Netflix content release years are distributed.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="release_years">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-calendar"></i> Show Release Trends
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Top Genres</h5>
+                <p class="card-text">
+                  Discover the most popular genres on Netflix.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="top_genres">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-film"></i> Show Top Genres
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Dataset Information</h5>
+                <p class="card-text">
+                  View the dataset shape and structure.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="dataset_shape">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-database"></i> Show Dataset Shape
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Dataset Preview</h5>
+                <p class="card-text">
+                  View the first 20 rows of the dataset.
+                </p>
+                <form action="/dashboard2" method="get" class="form-ajax">
+                  <input type="hidden" name="query" value="top_rows">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-table"></i> Show Top 20 Rows
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recommendations Section -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Netflix Recommendations</h4>
+            </div>
+            <div class="card-body">
+              <form method="POST" action="{{ url_for('dashboard2') }}" class="mb-4">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="title" 
+                         placeholder="Enter a movie or show title to get recommendations...">
+                  <button class="btn btn-primary" type="submit">Get Recommendations</button>
+                </div>
+              </form>
+              
+              {% if recommendations %}
+              <div class="row">
+                {% for movie in recommendations %}
+                <div class="col-md-4 mb-4">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ movie.title }}</h5>
+                      <p class="card-text">{{ movie.description[:200] }}...</p>
+                      <div class="mt-2">
+                        <span class="badge bg-primary">{{ movie.type }}</span>
+                        <span class="badge bg-secondary">{{ movie.rating }}</span>
+                        <span class="badge bg-info">{{ movie.listed_in }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection">
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>{{ error_message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% if plot_url %}
+        <section class="visualization-container animate__animated animate__fadeIn mt-4">
+          <div class="text-center">
+            <img src="data:image/png;base64,{{ plot_url }}" class="img-fluid rounded" />
+          </div>
+        </section>
+        {% endif %}
+      </div>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+      <div class="container text-center">
+        <p class="mb-0">
+          © Netflix Analytics Dashboard | Built by Riya Vora (24mds015)
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // AJAX form handling
+      document.querySelectorAll(".form-ajax").forEach((form) => {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const query = form.querySelector('input[name="query"]').value;
+          
+          try {
+            const response = await fetch(`/dashboard2?query=${query}`, {
+              method: 'GET',
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Server returned ${response.status}`);
+            }
+
+            const html = await response.text();
+            document.getElementById("resultsSection").innerHTML = html;
+          } catch (error) {
+            console.error("Error:", error);
+            document.getElementById("resultsSection").innerHTML = `
+              <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>Error: ${error.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            `;
+          }
+        });
+      });
+    </script>
+  </body>
+</html> 

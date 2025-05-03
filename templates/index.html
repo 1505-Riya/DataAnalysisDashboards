@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Analysis</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --accent-color: #4895ef;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .dashboard-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-dashboard {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-dashboard:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .btn-dashboard i {
+        font-size: 1.2rem;
+      }
+
+      .visualization-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 30px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .data-table {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .data-table th {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+      }
+
+      .loading-spinner {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .section-title {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background-color: var(--accent-color);
+      }
+
+      .alert-custom {
+        border-left: 4px solid var(--primary-color);
+        border-radius: 8px;
+      }
+
+      .tooltip-inner {
+        border-radius: 8px;
+        padding: 8px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-dark"
+      style="background-color: var(--primary-color)"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fas fa-chart-line me-2"></i>E-COMMERCE ANALYTICS
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">
+                <i class="fas fa-chart-bar me-1"></i>E-Commerce Sales Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard2">
+                <i class="fas fa-chart-pie me-1"></i>Netflix Titles Analytics
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard3">
+                <i class="fas fa-chart-line me-1"></i>Amazon Prime Analytics
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard-header animate__animated animate__fadeIn">
+      <div class="container">
+        <h1 class="text-center mb-3">
+          <i class="fas fa-chart-line me-2"></i>E-COMMERCE SALES ANALYTICS
+        </h1>
+        <p class="text-center mb-0">
+          Interactive dashboard for analyzing sales performance and trends
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Data Exploration Section -->
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-database me-2"></i>Data Exploration
+        </h3>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Dataset Preview</h5>
+                <p class="card-text">
+                  View the first 10 rows of the dataset to understand its
+                  structure.
+                </p>
+                <form action="/head" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-table"></i> Show First 10 Rows
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Dataset Dimensions</h5>
+                <p class="card-text">
+                  Check how many rows and columns are in the dataset.
+                </p>
+                <form action="/shape" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-ruler-combined"></i> Show Dataset Shape
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Payment Methods</h5>
+                <p class="card-text">
+                  Analyze the distribution of payment methods used by customers.
+                </p>
+                <form
+                  action="/payment_mode_percentage"
+                  method="get"
+                  class="form-ajax"
+                >
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-credit-card"></i> Payment Methods
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sales Analysis Section -->
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-chart-pie me-2"></i>Sales Analysis
+        </h3>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Category Profit</h5>
+                <p class="card-text">
+                  See which product categories generate the most profit.
+                </p>
+                <form
+                  action="/profit_by_category"
+                  method="get"
+                  class="form-ajax"
+                >
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-money-bill-wave"></i> Profit by Category
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Monthly Trends</h5>
+                <p class="card-text">
+                  Track sales performance over time to identify patterns.
+                </p>
+                <form action="/monthly_trend" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-chart-line"></i> Monthly Sales Trend
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Order Volume</h5>
+                <p class="card-text">
+                  Analyze how order volume fluctuates month to month.
+                </p>
+                <form action="/monthly_orders" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-shopping-cart"></i> Monthly Orders
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Product Analysis Section -->
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-boxes me-2"></i>Product Analysis
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Sub-Category Performance</h5>
+                <p class="card-text">
+                  Visualize sales distribution across product sub-categories.
+                </p>
+                <form
+                  action="/subcategory_treemap"
+                  method="get"
+                  class="form-ajax"
+                >
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-tree"></i> Sub-Category Treemap
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Top Selling Products</h5>
+                <p class="card-text">
+                  Discover which products are the best sellers.
+                </p>
+                <form action="/top_products" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-star"></i> Top Products
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customer Analysis Section -->
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-users me-2"></i>Customer Analysis
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Customer Segments</h5>
+                <p class="card-text">
+                  Analyze customer segments based on purchase behavior.
+                </p>
+                <form
+                  action="/customer_segments"
+                  method="get"
+                  class="form-ajax"
+                >
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-user-friends"></i> Customer Segments
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Average Order Value</h5>
+                <p class="card-text">
+                  Track how average order value changes over time.
+                </p>
+                <form action="/avg_order_value" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-chart-bar"></i> AOV Trend
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Regional Analysis Section -->
+      <section class="mb-5 animate__animated animate__fadeInUp">
+        <h3 class="section-title">
+          <i class="fas fa-globe me-2"></i>Regional Analysis
+        </h3>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Regional Sales</h5>
+                <p class="card-text">
+                  Analyze sales performance across different regions.
+                </p>
+                <form action="/regional_sales" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-map-marked-alt"></i> Regional Sales
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Payment Analysis</h5>
+                <p class="card-text">
+                  Compare payment methods with order values.
+                </p>
+                <form action="/payment_analysis" method="get" class="form-ajax">
+                  <button type="submit" class="btn-dashboard">
+                    <i class="fas fa-credit-card"></i> Payment Analysis
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Loading Spinner -->
+      <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p class="mt-2">Processing your request...</p>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection">
+        {% if head_html %}
+        <section
+          class="visualization-container animate__animated animate__fadeIn"
+        >
+          <h3 class="section-title">
+            <i class="fas fa-table me-2"></i>Dataset Preview
+          </h3>
+          <div class="table-responsive data-table">{{ head_html | safe }}</div>
+        </section>
+        {% endif %} {% if shape_html %}
+        <section
+          class="visualization-container animate__animated animate__fadeIn mt-4"
+        >
+          <h3 class="section-title">
+            <i class="fas fa-ruler-combined me-2"></i>Dataset Dimensions
+          </h3>
+          <div class="alert alert-custom">{{ shape_html | safe }}</div>
+        </section>
+        {% endif %} {% if plot_url %}
+        <section
+          class="visualization-container animate__animated animate__fadeIn mt-4"
+        >
+          <div class="text-center">
+            <img
+              src="data:image/png;base64,{{ plot_url }}"
+              class="img-fluid rounded"
+            />
+          </div>
+        </section>
+        {% endif %}
+      </div>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+      <div class="container text-center">
+        <p class="mb-0">
+          © E-Commerce Analytics Dashboard | Built by Riya Vora (24mds015)
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Initialize tooltips
+      const tooltipTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      );
+      tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+      });
+
+      // AJAX form handling
+      document.querySelectorAll(".form-ajax").forEach((form) => {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const formData = new FormData(form);
+          const action = form.getAttribute("action");
+          const method = form.getAttribute("method");
+
+          // Show loading spinner
+          document.getElementById("loadingSpinner").style.display = "block";
+
+          try {
+            const response = await fetch(action, {
+              method: method,
+              body: method === "get" ? null : formData,
+            });
+
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(
+                `Server returned ${response.status}: ${errorText}`
+              );
+            }
+
+            const html = await response.text();
+
+            // Create a temporary DOM element to parse the response
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+
+            // Extract the results section
+            const newResults =
+              tempDiv.querySelector("#resultsSection") || tempDiv;
+
+            // Replace the current results with the new ones
+            document.getElementById("resultsSection").innerHTML =
+              newResults.innerHTML;
+
+            // Add animation class to new content
+            document
+              .querySelectorAll("#resultsSection > section")
+              .forEach((section) => {
+                section.classList.add("animate__fadeIn");
+              });
+          } catch (error) {
+            console.error("Error:", error);
+            // Show error message in a more user-friendly way
+            const errorDiv = document.createElement("div");
+            errorDiv.className =
+              "alert alert-danger alert-dismissible fade show";
+            errorDiv.innerHTML = `
+              <strong>Error!</strong> ${error.message}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.getElementById("resultsSection").innerHTML = "";
+            document.getElementById("resultsSection").appendChild(errorDiv);
+          } finally {
+            // Hide loading spinner
+            document.getElementById("loadingSpinner").style.display = "none";
+
+            // Scroll to results
+            document.getElementById("resultsSection").scrollIntoView({
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+
+      // Add animation on scroll
+      function animateOnScroll() {
+        const sections = document.querySelectorAll("section");
+
+        sections.forEach((section) => {
+          const sectionTop = section.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+
+          if (sectionTop < windowHeight - 100) {
+            section.classList.add("animate__fadeInUp");
+          }
+        });
+      }
+
+      // Initial animation check
+      animateOnScroll();
+
+      // Check on scroll
+      window.addEventListener("scroll", animateOnScroll);
+    </script>
+  </body>
+</html>
