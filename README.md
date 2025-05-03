@@ -81,13 +81,7 @@ This project marks my first experience with Docker, and it's fully containerized
 | `/analytics/sales`  | GET    | View sales data visualizations          |
 | `/analytics/customer`| GET   | Get customer segmentation data          |
 
----
 
-## 🐳 Docker Setup
-
-### 🧾 Prerequisites
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
 
 ### 🏗️ Build & Run
 
