@@ -82,10 +82,33 @@ This project marks my first experience with Docker, and it's fully containerized
 | `/analytics/customer`| GET   | Get customer segmentation data          |
 
 
-
 ### 🏗️ Build & Run
 
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/yourusername/ecommerce-analytics-docker.git
    cd ecommerce-analytics-docker
+
+Future Upgrades
+### 1. Real-Time Data Streaming
+- Integrate **Apache Kafka** or **AWS Kinesis** to handle live streams of sales and review data.
+- Power dashboards with real-time updates—no manual refresh required.
+
+### 2. Cloud-Native Deployment
+- Migrate from local Docker to **AWS ECS/Fargate** or **Google Cloud Run**.
+- Enable auto-scaling and high availability.
+- Add **load balancing** for better performance under traffic spikes.
+
+### 3. Serverless ML APIs
+- Deploy **sentiment analysis** and **recommendation models** as **microservices** using **AWS Lambda** or **FastAPI**.
+- Cut costs by using a **pay-per-inference** pricing model.
+
+### 4. Time-Series Database
+- Replace **SQLite** with **InfluxDB** or **TimescaleDB** for handling time-based sales analytics.
+- Optimize long-term trend analysis and high-frequency queries.
+
+### 5. Edge Caching
+- Use **Cloudflare CDN** or similar edge services to globally cache static dashboard assets.
+- Significantly reduce latency for international users and mobile devices.
+
+---
